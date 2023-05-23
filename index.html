@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BPredict</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <!-- BLOB -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.12.0/css/bootstrap.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f2f2f2;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .app-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .app-header h1 {
+      font-size: 24px;
+      color: #333;
+    }
+
+    .input-section {
+      margin-bottom: 10px;
+    }
+
+    .input-section label {
+      display: block;
+      margin-bottom: 5px;
+      color: #333;
+      font-weight: bold;
+    }
+
+    .input-section input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .input-section button {
+      display: block;
+      width: 100%;
+      padding: 8px;
+      margin-top: 10px;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .input-section button:hover {
+      background-color: #555;
+    }
+
+    .counter {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 18px;
+      color: #333;
+    }
+
+  .table-container {
+    overflow: hidden;
+    width: 100%;
+    min-height: 100px; /* Adjust the height as per your requirement */
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      color: #333;
+    }
+
+    .statistics-container {
+      margin-top: 20px;
+      text-align: center;
+      color: #333;
+    }
+
+    .chart-container {
+      width: 20%;
+      height: 100px;
+      background-color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .number-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        max-width: 320px; /* Adjust the max-width as desired */
+        margin: 0 auto;
+      }
+      
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+      }
+      
+      button {
+        width: 40px;
+        height: 40px;
+        font-size: 14px;
+        margin: 5px;
+      }
+      
+      
+  </style>
+</head>
+<body>
+  <div class="app-container">
+
+    <div class="app-header">
+      <h1>BPredict</h1>
+      <p>Your Lucky Bet is:</p>
+      <span id="mostLikelyNumber">Play a round</span>
+    </div>
+
+    
+    
+
+    <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <button onclick="addDataPoint(0)">0</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(1)">1</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(2)">2</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(3)">3</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(4)">4</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(5)">5</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-2">
+            <button onclick="addDataPoint(6)">6</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(7)">7</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(8)">8</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(9)">9</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(10)">10</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(11)">11</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-2">
+            <button onclick="addDataPoint(12)">12</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(13)">13</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(14)">14</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(15)">15</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(16)">16</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(17)">17</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-2">
+            <button onclick="addDataPoint(18)">18</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(19)">19</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(20)">20</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(21)">21</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(22)">22</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(23)">23</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-2">
+            <button onclick="addDataPoint(24)">24</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(25)">25</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(26)">26</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(27)">27</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(28)">28</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(29)">29</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-2">
+            <button onclick="addDataPoint(30)">30</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(31)">31</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(32)">32</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(33)">33</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(34)">34</button>
+          </div>
+          <div class="col-2">
+            <button onclick="addDataPoint(35)">35</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-2">
+            <button onclick="addDataPoint(36)">36</button>
+          </div>
+          <!-- Add more rows and buttons if needed -->
+        </div>
+      </div>
+    
+
+    <div class="counter">Round: <span id="roundCounter">Begin</span></div>
+
+
+
+    <div class="chart-container">
+      <canvas id="chart"></canvas>
+    </div>
+
+
+
+
+    <div class="statistics-container">
+      <div id="colorStats"></div>
+      <div id="evenOddStats"></div>
+    </div>
+  </div>
+
+
+  <div class="chart-container">
+    <!-- <table style="height: 100%">
+      <thead>
+        <tr>
+          <th>Number</th>
+          <th>Color</th>
+          <th>Even/Odd</th>
+        </tr>
+      </thead>
+      <tbody id="numberList"></tbody>
+    </table> -->
+  </div>
+
+
+  <script>
+    let numbers = [];
+    let roundCounter = 0;
+    const colorDict = {
+    0: 'green',
+    1: 'red',
+    2: 'black',
+    3: 'red',
+    4: 'black',
+    5: 'red',
+    6: 'black',
+    7: 'red',
+    8: 'black',
+    9: 'red',
+    10: 'black',
+    11: 'black',
+    12: 'red',
+    13: 'black',
+    14: 'red',
+    15: 'black',
+    16: 'red',
+    17: 'black',
+    18: 'red',
+    19: 'red',
+    20: 'black',
+    21: 'red',
+    22: 'black',
+    23: 'red',
+    24: 'black',
+    25: 'red',
+    26: 'black',
+    27: 'red',
+    28: 'black',
+    29: 'black',
+    30: 'red',
+    31: 'black',
+    32: 'red',
+    33: 'black',
+    34: 'red',
+    35: 'black',
+    36: 'red'
+    };
+    
+    // Probability distribution object
+    let probabilityDistribution = {};
+    
+    
+    // Add a new data point
+    function addDataPoint(number) {
+        if (number >= -1 && number <= 36) {
+          numbers.push(number);
+          updateRoundCounter();
+          updateChart();
+          updateStatistics();
+          storeNumberInArray(number);
+          updateProbabilityDistribution(number);
+        }
+      }
+
+
+
+    
+    function addDataPoints() {
+        let number = parseInt(document.getElementById("number").value);
+        if (number >= 0 && number <= 36) {
+            numbers.push(number);
+            updateTable();
+            updateRoundCounter();
+            updateChart();
+            updateStatistics();                
+            storeNumberInArray(number);
+    
+            updateProbabilityDistribution(number);
+        }
+        document.getElementById("number").value = "";
+    
+    }
+    let myArray = []; // Create an empty array
+    function storeNumberInArray(number) {
+              
+      myArray.push(number); // Add the number to the array
+    
+      console.log('Adding '+ number + ' to stores.');
+      console.log(myArray);
+    
+      return myArray;
+    }
+    
+    // Update the probability distribution
+    function updateProbabilityDistribution(number) {
+    if (probabilityDistribution.hasOwnProperty(number)) {
+    probabilityDistribution[number]++;
+    }
+    else{
+    probabilityDistribution[number] = 1;
+    }
+    } 
+    
+    // Calculate the most likely number
+    function calculateMostLikelyNumber() {
+    let mostLikelyNumber;
+    let maxProbability = -1;
+    
+    for (const number in probabilityDistribution) {
+    if (probabilityDistribution.hasOwnProperty(number)) {
+    const probability = probabilityDistribution[number];
+    if (probability > maxProbability) {
+    mostLikelyNumber = number;
+    maxProbability = probability;
+    }
+    }
+    }
+    
+    return mostLikelyNumber;
+    }
+    
+    // Update the round counter
+    function updateRoundCounter() {
+        roundCounter++;
+        document.getElementById("roundCounter").textContent = roundCounter;
+    }
+    
+    // Update the table
+    function updateTable() {
+        const tableBody = document.getElementById("numberList");
+        const newRow = document.createElement("tr");
+        const number = numbers[numbers.length - 1];
+        const color = colorDict[number];
+        const evenOdd = number % 2 === 0 ? 'even' : 'odd';
+        newRow.innerHTML = `<td>${number}</td><td>${color}</td><td>${evenOdd}</td>`;
+        tableBody.prepend(newRow);
+    }
+    
+    let chart; // Declare a chart variable
+    
+    function generateChartData() {
+    const colorCounts = {
+    black: 0,
+    red: 0,
+    green: 0
+    };
+    
+    for (const number of numbers) {
+    const color = colorDict[number];
+    colorCounts[color]++;
+    }
+    
+    const data = {
+    <!-- labels: Object.keys(colorCounts), -->
+    datasets: [{
+    data: Object.values(colorCounts),
+    backgroundColor: ['black', 'red', 'green']
+    }]
+    };
+    
+    return data;
+    }
+    
+    
+    
+    // Update the chart
+    function updateChart() {
+    const chartCanvas = document.getElementById("chart");
+    const chartData = generateChartData();
+    
+    // Check if a chart instance already exists, and destroy it
+    if (chart) {
+    chart.destroy();
+    }
+    
+    chart = new Chart(chartCanvas, {
+    type: 'pie',
+    data: chartData
+    });
+    }
+    
+    function calculateStatistics() {
+    const colorCounts = {
+    black: 0,
+    red: 0,
+    green: 0
+    };
+    const evenOddCounts = {
+    even: 0,
+    odd: 0
+    };
+    
+    for (const number of numbers) {
+    const color = colorDict[number];
+    const evenOdd = number % 2 === 0 ? 'even' : 'odd';
+    colorCounts[color]++;
+    evenOddCounts[evenOdd]++;
+    }
+    
+    const colorStatistics = Object.entries(colorCounts).map(([color, count]) => {
+    const percentage = (count / numbers.length * 100).toFixed(2);
+    return {
+    color,
+    count,
+    percentage
+    };
+    });
+    
+    const evenOddStatistics = Object.entries(evenOddCounts).map(([evenOdd, count]) => {
+    const percentage = (count / numbers.length * 100).toFixed(2);
+    return {
+    evenOdd,
+    count,
+    percentage
+    };
+    });
+    
+    return {
+    colorStatistics,
+    evenOddStatistics
+    };
+    }
+    
+    
+    
+    function updateStatistics() {
+    const colorStatistics = calculateStatistics().colorStatistics;
+    const evenOddStatistics = calculateStatistics().evenOddStatistics;
+    
+    // Update color statistics
+    const colorStatsContainer = document.getElementById("colorStats");
+    colorStatsContainer.innerHTML = "";
+    for (const stat of colorStatistics) {
+    const { color, count, percentage } = stat;
+    const statElement = document.createElement("div");
+    statElement.textContent = `${color}: ${count} (${percentage}%)`;
+    colorStatsContainer.appendChild(statElement);
+    }
+    
+    // Update even/odd statistics
+    const evenOddStatsContainer = document.getElementById("evenOddStats");
+    evenOddStatsContainer.innerHTML = "";
+    for (const stat of evenOddStatistics) {
+    const { evenOdd, count, percentage } = stat;
+    const statElement = document.createElement("div");
+    statElement.textContent = `${evenOdd}: ${count} (${percentage}%)`;
+    evenOddStatsContainer.appendChild(statElement);
+    }
+    
+    const mostLikelyNumber = calculateMostLikelyNumber();
+    document.getElementById("mostLikelyNumber").textContent = mostLikelyNumber;
+    
+    }
+    </script>
+
+
+
+
+</body>
+</html>
